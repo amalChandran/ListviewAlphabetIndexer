@@ -2,15 +2,25 @@
 package com.amalbit.test;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import com.amalbit.test.R.menu;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.app.Activity;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.Context;
 import android.database.Cursor;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -19,13 +29,18 @@ import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AlphabetIndexer;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements SearchView.OnQueryTextListener{
+	
+	
 
     protected static final String TAG = "MainActivity";
     private LinearLayout mIndexerLayout;
@@ -34,11 +49,14 @@ public class MainActivity extends Activity {
     private TextView mTitleText;
     private RelativeLayout mSectionToastLayout;
     private TextView mSectionToastText;
-    private ArrayList<Contact> contacts = new ArrayList<Contact>();
+    private ArrayList<Glossary> glossaries = new ArrayList<Glossary>();
     private String alphabet = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private AlphabetIndexer mIndexer;
     private ContactListAdapter mAdapter;
     private int lastSelectedPosition = -1;
+    
+//    private EditText etInput;
+    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +68,7 @@ public class MainActivity extends Activity {
 
     @SuppressWarnings("deprecation")
     private void initView() {
+//    	etInput = (EditText) findViewById(R.id.et_input);
         mIndexerLayout = (LinearLayout) findViewById(R.id.indexer_layout);
         mListView = (ListView) findViewById(R.id.contacts_list);
         mTitleLayout = (FrameLayout) findViewById(R.id.title_layout);
@@ -74,23 +93,51 @@ public class MainActivity extends Activity {
             do {
                 String name = cursor.getString(0);
                 String sortKey = getSortKey(cursor.getString(1));
-                Contact contact = new Contact();
-                contact.setName(name);
-                contact.setSortKey(sortKey);
-                contacts.add(contact);
+                Log.e("sortKey from cursor", ""+sortKey);
+                Glossary glossary = new Glossary();
+                glossary.setName(name);
+                glossary.setSortKey(sortKey);
+                glossaries.add(glossary);
             } while (cursor.moveToNext());
         }
         
-        mAdapter = new ContactListAdapter(this, contacts);
+        mAdapter = new ContactListAdapter(this, glossaries);
         startManagingCursor(cursor);
         mIndexer = new AlphabetIndexer(cursor, 1, alphabet);
         mAdapter.setIndexer(mIndexer);
         
-        if(contacts != null && contacts.size() > 0) {
+        if(glossaries != null && glossaries.size() > 0) {
             mListView.setAdapter(mAdapter);
             mListView.setOnScrollListener(mOnScrollListener);
             mIndexerLayout.setOnTouchListener(mOnTouchListener);
         }
+        
+//        etInput.addTextChangedListener(new TextWatcher() {
+//			
+//			@Override
+//			public void onTextChanged(CharSequence s, int start, int before, int count) {
+//				
+//				
+//
+//					
+//				
+//				
+//				
+//			}
+//			
+//			@Override
+//			public void beforeTextChanged(CharSequence s, int start, int count,
+//					int after) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void afterTextChanged(Editable s) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
         
     }
     
@@ -216,8 +263,86 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+    	MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        mSearchView = (SearchView) searchItem.getActionView();
+        setupSearchView(searchItem);
         return true;
     }
+    
+    /**
+     * On selecting action bar icons
+     * */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Take appropriate action for each action item click
+        switch (item.getItemId()) {
+        case R.id.action_search:
+            // search action
+        	// Associate searchable configuration with the SearchView
+//            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//            SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+//                    .getActionView();
+//            searchView.setSearchableInfo(searchManager
+//                    .getSearchableInfo(getComponentName()));
+            return true;
+ 
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+    
+    private void setupSearchView(MenuItem searchItem) {
+    	 
+//        if (isAlwaysExpanded()) {
+//            mSearchView.setIconifiedByDefault(false);
+//        } else {
+//            searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM
+//                    | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+//        }
+ 
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        if (searchManager != null) {
+//            List<SearchableInfo> searchables = searchManager.getSearchablesInGlobalSearch();
+// 
+//            SearchableInfo info = searchManager.getSearchableInfo(getComponentName());
+//            for (SearchableInfo inf : searchables) {
+//                if (inf.getSuggestAuthority() != null
+//                        && inf.getSuggestAuthority().startsWith("applications")) {
+//                    info = inf;
+//                }
+//            }
+//            mSearchView.setSearchableInfo(info);
+//        }
+ 
+        mSearchView.setOnQueryTextListener(this);
+    }
+ 
+    public boolean onQueryTextChange(String newText) {
+       // mStatusView.setText("Query = " + newText);
+        Log.i("Action Search Query", newText);
+        mAdapter.getFilter().filter(newText);
+		Log.i("mAdapter", ""+newText);
+        return false;
+    }
+ 
+    public boolean onQueryTextSubmit(String query) {
+        //mStatusView.setText("Query = " + query + " : submitted");
+    	Log.i("Action Search Query", query);
+        return false;
+    }
+ 
+    public boolean onClose() {
+       // mStatusView.setText("Closed!");
+    	Log.i("Action Search Query", "^%^%^%^%^");
+        return false;
+    }
+ 
+    protected boolean isAlwaysExpanded() {
+        return false;
+    }
+
+    
 
 }

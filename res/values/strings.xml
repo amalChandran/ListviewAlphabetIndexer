@@ -4,5 +4,7 @@
     <string name="app_name">ListviewAlphabetIndexer</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    
+    <string name="search_hint">Glossary</string>
 
 </resources>

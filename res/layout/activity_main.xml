@@ -21,6 +21,7 @@
         android:layout_height="18dip"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
+
         android:background="#EAEAEA" >
 
         <TextView
@@ -60,5 +61,7 @@
             android:textColor="#8E8E8E"
             android:textSize="30sp" />
     </RelativeLayout>
+
+    
 
 </RelativeLayout>

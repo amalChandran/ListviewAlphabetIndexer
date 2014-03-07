@@ -2,9 +2,9 @@ package com.amalbit.test;
 
 /**
  * 
- * @author amalChandran
+ * @author guolin
  */
-public class Contact {
+public class Glossary {
 
 	/**
 	 * è?”ç³»äººå§“å??

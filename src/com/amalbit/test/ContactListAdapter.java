@@ -3,37 +3,43 @@ package com.amalbit.test;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AlphabetIndexer;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-public class ContactListAdapter extends BaseAdapter/* implements SectionIndexer*/ {
+
+public class ContactListAdapter extends BaseAdapter implements Filterable {
 
     private Context mContext;
-    private ArrayList<Contact> mContacts;
+    private ArrayList<Glossary> glossariesList;
+    /** This is mainly for listview search **/
+    private ArrayList<Glossary> glossariesListForSearch;
     private LayoutInflater mInflater;
     private AlphabetIndexer mIndexer;
     
-    public ContactListAdapter(Context context, ArrayList<Contact> contacts) {
+    public ContactListAdapter(Context context, ArrayList<Glossary> glossaries) {
         super();
         this.mContext = context;
-        this.mContacts = contacts;
+        this.glossariesList = glossaries;
+        glossariesListForSearch = glossaries;
         mInflater = LayoutInflater.from(mContext);
     }
 
     @Override
     public int getCount() {
-        return mContacts.size();
+        return glossariesList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mContacts.get(position);
+        return glossariesList.get(position);
     }
 
     @Override
@@ -54,11 +60,11 @@ public class ContactListAdapter extends BaseAdapter/* implements SectionIndexer*
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Contact contact = mContacts.get(position);
-        holder.contactName.setText(contact.getName());
+        Glossary glossary = glossariesList.get(position);
+        holder.contactName.setText(glossary.getName());
         int section = mIndexer.getSectionForPosition(position);
         if (position == mIndexer.getPositionForSection(section)) {
-            holder.sortKey.setText(contact.getSortKey());
+            holder.sortKey.setText(glossary.getSortKey());
             holder.sortKeyLayout.setVisibility(View.VISIBLE);
         } else {
             holder.sortKeyLayout.setVisibility(View.GONE);
@@ -80,9 +86,10 @@ public class ContactListAdapter extends BaseAdapter/* implements SectionIndexer*
     public int getSectionForPosition(int position) {
         return 0;
     }*/
+    
 
+    
     /**
-     * 给当�?适�?器传入一个分组工具。
      * 
      * @param indexer
      */
@@ -95,4 +102,50 @@ public class ContactListAdapter extends BaseAdapter/* implements SectionIndexer*
         TextView sortKey;
         TextView contactName;
     }
+
+	@Override
+	public Filter getFilter() {
+		// TODO Auto-generated method stub
+		return myFilter;
+	}
+    
+    Filter myFilter = new Filter() {
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public void publishResults(CharSequence constraint, FilterResults results) {
+			glossariesList = (ArrayList<Glossary>) results.values;
+	          if (results.count > 0) {
+	           notifyDataSetChanged();
+	          } else {
+	              notifyDataSetInvalidated();
+	          } 
+			
+		}
+		
+		@Override
+		public FilterResults performFiltering(CharSequence constraint) {
+			FilterResults filterResults = new FilterResults();   
+	         ArrayList<Glossary> tempGlossaryList=new ArrayList<Glossary>();
+
+	         if(constraint != null && glossariesListForSearch!=null) {
+	             int length=glossariesListForSearch.size();
+	             Log.i("Filtering", "glossaries size"+length);
+	             int i=0;
+	                while(i<length){
+	                	Glossary item=glossariesListForSearch.get(i);
+	                	// Real filtering:
+	                	if(item.getName().toLowerCase().contains(constraint.toString().toLowerCase())){
+	                		tempGlossaryList.add(item);
+	                	}
+	                    i++;
+	                }
+
+	                filterResults.values = tempGlossaryList;
+	                filterResults.count = tempGlossaryList.size();
+	                Log.i("Filtering", "Filter result count size"+filterResults.count);
+	          }
+	          return filterResults;
+		}
+	};
 }

@@ -65,6 +65,7 @@ public class MainActivity extends Activity {
             letterTextView.setLayoutParams(params);
             letterTextView.setPadding(4, 0, 2, 0);
             mIndexerLayout.addView(letterTextView);
+            mIndexerLayout.setBackgroundResource(R.drawable.letterslist_bg);
         }
         Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
         Cursor cursor = getContentResolver().query(uri,
@@ -108,9 +109,10 @@ public class MainActivity extends Activity {
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             if(scrollState == SCROLL_STATE_IDLE) {
-                mIndexerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                //mIndexerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            	//mIndexerLayout.setBackgroundResource(R.drawable.letterslist_bg);
             } else {
-                mIndexerLayout.setBackgroundResource(R.drawable.letterslist_bg);
+                //mIndexerLayout.setBackgroundResource(R.drawable.letterslist_bg);
             }
         }
 
@@ -200,7 +202,7 @@ public class MainActivity extends Activity {
                     mListView.smoothScrollToPositionFromTop(position,0,1);
                     break;
                 case MotionEvent.ACTION_UP:
-                    mIndexerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    //mIndexerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                     mSectionToastLayout.setVisibility(View.GONE);
                 default:
                     mSectionToastLayout.setVisibility(View.GONE);

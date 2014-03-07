@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="DefaultLocale" severity="ignore" />
+    <issue id="DrawAllocation" severity="ignore" />
+    <issue id="InlinedApi" severity="ignore" />
+    <issue id="ResourceAsColor" severity="ignore" />
+    <issue id="SelectableText" severity="ignore" />
+</lint>

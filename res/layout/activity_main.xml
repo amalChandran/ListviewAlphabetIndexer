@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ListView
+        android:id="@+id/contacts_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@null"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_marginRight="30dp"
+        android:scrollbarTrackVertical="@drawable/scrollbar_vertical_track"
+        android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb" >
+    </ListView>
+
+    <FrameLayout
+        android:id="@+id/title_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="18dip"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="30dp"
+        android:background="#EAEAEA" >
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dip"
+            android:textColor="#000000"
+            android:textSize="13sp" />
+    </FrameLayout>
+    
+    <LinearLayout
+        android:id="@+id/indexer_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="vertical" />
+
+    <RelativeLayout
+        android:id="@+id/section_toast_layout"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_centerInParent="true"
+        android:background="@drawable/current_letter_bubble"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/section_toast_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#8E8E8E"
+            android:textSize="30sp" />
+    </RelativeLayout>
+
+</RelativeLayout>
